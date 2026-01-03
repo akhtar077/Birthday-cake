@@ -3,7 +3,106 @@
 <head>
     <title>Birthday Cake</title>
     <style>
-        /* Paste all the CSS I gave you earlier here */
+        /* Container & Button Base */
+.birthday-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fceecb; /* Cream background from video */
+}
+
+.birthday-button {
+  position: relative;
+  width: 220px;
+  height: 70px;
+  background-color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.birthday-button__text {
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  color: #333;
+  transition: opacity 0.3s;
+}
+
+/* Cake Wrapper Animation */
+.cake-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Interaction: Show cake on Hover/Click */
+.birthday-button:hover .cake-wrapper {
+  transform: translateX(-50%) scale(1) translateY(-20px);
+  opacity: 1;
+}
+
+.birthday-button:hover .birthday-button__text {
+  opacity: 0;
+}
+
+/* Cake Body Styling */
+.cake-bottom {
+  width: 140px;
+  height: 60px;
+  background-color: #fdfdfd;
+  border-radius: 10px;
+  position: relative;
+}
+
+.cake-top {
+  width: 140px;
+  height: 25px;
+  background-color: #ff4d6d; /* Pink frosting */
+  border-radius: 10px 10px 0 0;
+  position: absolute;
+  top: -15px;
+  z-index: 2;
+}
+
+/* Face Features */
+.eyes {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+
+.eyes::before, .eyes::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+}
+
+/* Candles */
+.candles {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  position: absolute;
+  top: -35px;
+}
+
+.candle {
+  width: 6px;
+  height: 20px;
+  background: linear-gradient(#ffbe0b, #fb5607);
+  border-radius: 3px;
+}
         body { background: #fceecb; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .birthday-button { position: relative; width: 220px; height: 70px; background: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
         .cake-wrapper { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%) scale(0); opacity: 0; transition: 0.5s; }
@@ -30,6 +129,15 @@
             btn.classList.toggle('is-open');
             document.getElementById('btnText').style.opacity = btn.classList.contains('is-open') ? "0" : "1";
         });
+        const button = document.getElementById('cakeButton');
+
+button.addEventListener('click', () => {
+  // Toggle the 'is-open' class to show/hide the cake
+  button.classList.toggle('is-open');
+  
+  // Optional: Add a console log to check it's working
+  console.log("Birthday wishes sent! 🎂");
+});
     </script>
 </body>
 </html>
