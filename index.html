@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Birthday Cake</title>
+    <style>
+        /* Paste all the CSS I gave you earlier here */
+        body { background: #fceecb; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .birthday-button { position: relative; width: 220px; height: 70px; background: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .cake-wrapper { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%) scale(0); opacity: 0; transition: 0.5s; }
+        .is-open .cake-wrapper { transform: translateX(-50%) scale(1); opacity: 1; }
+        .cake-bottom { width: 140px; height: 60px; background: #fff; border-radius: 10px; border: 2px solid #eee; }
+        .cake-top { width: 140px; height: 20px; background: #ff4d6d; border-radius: 10px 10px 0 0; }
+        .flame { width: 8px; height: 12px; background: orange; border-radius: 50%; margin: -15px auto 0; }
+    </style>
+</head>
+<body>
+
+    <button class="birthday-button" id="cakeButton">
+        <span id="btnText">Click Me! 🎁</span>
+        <div class="cake-wrapper">
+            <div class="flame"></div>
+            <div class="cake-top"></div>
+            <div class="cake-bottom"></div>
+        </div>
+    </button>
+
+    <script>
+        const btn = document.getElementById('cakeButton');
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('is-open');
+            document.getElementById('btnText').style.opacity = btn.classList.contains('is-open') ? "0" : "1";
+        });
+    </script>
+</body>
+</html>
