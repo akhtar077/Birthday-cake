@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Surprise</title>
+    <title>Birthday Cake Surprise</title>
     <style>
         :root {
             --bg: #FCEECB;
             --frosting: #FF4D6D;
             --cake: #FFFFFF;
+            /* This curve creates the "jump" and "bounce" effect */
             --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -27,113 +28,121 @@
         /* The Button Container */
         .birthday-button {
             position: relative;
-            width: 250px;
-            height: 80px;
+            width: 260px;
+            height: 85px;
             background: white;
-            border-radius: 18px;
+            border-radius: 20px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 5;
         }
 
-        /* Letter Fly-Away logic */
-        .text-container { display: flex; font-weight: bold; font-size: 1.3rem; color: #333; }
-        .letter { display: inline-block; transition: transform 0.7s var(--spring), opacity 0.4s; }
-
+        /* Fly-away Text */
+        .text-container { display: flex; font-weight: bold; font-size: 1.4rem; color: #444; }
+        .letter { display: inline-block; transition: transform 0.8s var(--spring), opacity 0.4s; }
         .active .letter { opacity: 0; }
-        .active .letter:nth-child(1) { transform: translate(-100px, -150px) rotate(-40deg); }
-        .active .letter:nth-child(2) { transform: translate(-50px, -200px) rotate(20deg); }
-        .active .letter:nth-child(3) { transform: translate(0px, -180px) rotate(-10deg); }
-        .active .letter:nth-child(4) { transform: translate(50px, -200px) rotate(30deg); }
-        .active .letter:nth-child(5) { transform: translate(100px, -150px) rotate(-20deg); }
-        .active .letter:nth-child(7) { transform: translate(-30px, -220px) rotate(45deg); }
-        .active .letter:nth-child(8) { transform: translate(30px, -220px) rotate(-45deg); }
+        .active .letter:nth-child(odd) { transform: translate(-120px, -180px) rotate(-45deg); }
+        .active .letter:nth-child(even) { transform: translate(120px, -180px) rotate(45deg); }
 
-        /* The Cake - Exact Video Movement */
+        /* The Cake Container */
         .cake-wrapper {
             position: absolute;
             bottom: 0;
-            transform: scale(0) translateY(0);
+            transform: scale(0);
             opacity: 0;
             transition: all 0.8s var(--spring);
             pointer-events: none;
         }
 
         .active .cake-wrapper {
-            transform: scale(1) translateY(-65px); /* Pops up and stays up */
+            transform: scale(1) translateY(-70px);
             opacity: 1;
         }
 
-        .cake {
-            width: 150px;
-            height: 75px;
+        .cake-body {
+            width: 160px;
+            height: 85px;
             background: var(--cake);
-            border-radius: 12px;
+            border-radius: 15px;
             position: relative;
+            overflow: hidden; /* Clips the rotating face */
             box-shadow: inset 0 -5px 0 #eee;
         }
 
         .frosting {
-            width: 100%; height: 28px;
+            width: 100%; height: 30px;
             background: var(--frosting);
-            border-radius: 12px 12px 0 0;
-            position: relative;
+            position: absolute; top: 0; z-index: 2;
         }
 
-        /* Face and Sprinkles */
-        .face { position: absolute; width: 100%; top: 35px; display: flex; justify-content: center; gap: 20px; }
-        .eye { width: 7px; height: 7px; background: #333; border-radius: 50%; }
-        .mouth { width: 12px; height: 6px; border: 2px solid #333; border-top: 0; border-radius: 0 0 10px 10px; margin-top: 10px; }
+        /* Rotating Face Animation */
+        .face-container {
+            position: absolute;
+            width: 100%;
+            top: 45px;
+            /* Starts hidden to the left */
+            transform: translateX(-100%); 
+            transition: transform 0.6s ease-out 0.4s; /* Delays until cake is up */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
 
-        /* Candles */
-        .candles { position: absolute; top: -28px; width: 100%; display: flex; justify-content: space-evenly; }
-        .candle { width: 7px; height: 28px; background: #FFD166; border-radius: 3px; position: relative; }
+        .active .face-container {
+            transform: translateX(0); /* Slides into the center */
+        }
+
+        .eye { 
+            width: 8px; height: 8px; background: #333; border-radius: 50%; 
+            animation: blink 3s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .mouth {
+            width: 14px; height: 7px; border: 2px solid #333;
+            border-top: 0; border-radius: 0 0 10px 10px;
+            position: absolute; top: 12px;
+        }
+
+        /* Candles & Flames */
+        .candles { position: absolute; top: -30px; width: 100%; display: flex; justify-content: space-evenly; }
+        .candle { width: 8px; height: 35px; background: #FFD166; border-radius: 4px; }
         .flame {
-            width: 9px; height: 14px; background: #FF8C00; border-radius: 50% 50% 20% 20%;
-            position: absolute; top: -16px; box-shadow: 0 0 8px #FF8C00;
+            width: 10px; height: 16px; background: #FF8C00; border-radius: 50% 50% 20% 20%;
+            position: absolute; top: -18px; box-shadow: 0 0 10px #FF8C00;
             animation: flicker 0.1s infinite alternate;
         }
-
-        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.2); } }
 
         /* The Note Section */
         #note {
             margin-top: 40px;
-            max-width: 80%;
+            padding: 0 20px;
             text-align: center;
             font-size: 1.2rem;
             color: #5d4037;
-            font-weight: 500;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 1s ease 0.6s;
+            transition: all 1s ease 0.8s;
         }
 
         .active ~ #note {
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* Confetti Effect */
-        .confetti {
-            position: absolute; width: 10px; height: 10px; 
-            opacity: 0; pointer-events: none;
-        }
-        .active ~ .confetti { opacity: 1; animation: fire 2s ease-out forwards; }
-
-        @keyframes fire {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
-    <button class="birthday-button" id="btn">
+    <button class="birthday-button" id="cakeBtn">
         <div class="text-container">
             <span class="letter">H</span><span class="letter">a</span><span class="letter">p</span><span class="letter">p</span><span class="letter">y</span>
             <span class="letter">&nbsp;</span>
@@ -146,30 +155,26 @@
                 <div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div>
             </div>
-            <div class="cake">
+            <div class="cake-body">
                 <div class="frosting"></div>
-                <div class="face">
-                    <div class="eye"></div><div class="eye"></div><div class="mouth"></div>
+                <div class="face-container">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
                 </div>
             </div>
         </div>
     </button>
 
     <div id="note">
-        You are truly special! I hope this year brings you as much joy as you give to everyone around you. Happy Birthday! 🎉✨
+        "You make the world a brighter place! Happy Birthday! 🎉✨"
     </div>
 
-    <div class="confetti" style="left:10%; background:red;"></div>
-    <div class="confetti" style="left:30%; background:blue;"></div>
-    <div class="confetti" style="left:50%; background:green;"></div>
-    <div class="confetti" style="left:70%; background:yellow;"></div>
-    <div class="confetti" style="left:90%; background:purple;"></div>
-
-    <audio id="song" src="https://cdn.pixabay.com/audio/2022/11/22/audio_feb6391d37.mp3"></audio>
+    <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <script>
-        const btn = document.getElementById('btn');
-        const song = document.getElementById('song');
+        const btn = document.getElementById('cakeBtn');
+        const song = document.getElementById('audio');
 
         btn.addEventListener('click', () => {
             btn.classList.toggle('active');
